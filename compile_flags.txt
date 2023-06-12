@@ -1,4 +1,3 @@
 -std=c++2b
 -Weverything
--Wno-c++98-compat
--fmodule-file=iostream.pcm
+-Wno-c++98-compat-pedantic
