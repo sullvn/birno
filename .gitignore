@@ -1,0 +1,8 @@
+# Binary artifacts
+a.out
+
+# Intermediate build artifacts
+*.pcm
+
+# direnv directory
+/.direnv/
