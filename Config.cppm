@@ -9,7 +9,7 @@ export module Config;
 
 export class Config {
 public:
-  const std::size_t number;
+  const std::size_t number = 0;
 
   /**
    * Construct from program arguments
