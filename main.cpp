@@ -10,13 +10,16 @@ auto main(int argc, char *argv[]) -> int {
 
   auto maybe_config = Config::from_args(args);
   if (!maybe_config.has_value()) {
-    std::cout << "USAGE: a.out <number>\n";
+    std::cerr << "USAGE: a.out <number>\n";
     return 1;
   }
 
   auto config = maybe_config.value();
 
-  for (auto i : std::ranges::views::iota(0ull, config.number)) {
-    std::cout << i << "\n";
+  auto bytes = std::views::istream<char>(std::cin);
+  auto bytes_truncated = bytes | std::views::take(config.number);
+
+  for (auto b : bytes_truncated) {
+    std::cout << b << "\n";
   }
 }
