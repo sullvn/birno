@@ -1,20 +1,21 @@
 module;
 
 #include <cstddef>
-#include <span>
 #include <optional>
+#include <span>
 #include <string>
 
 export module Config;
 
 export class Config {
-  public:
+public:
   const std::size_t number;
 
   /**
    * Construct from program arguments
    */
-  static constexpr auto from_args(const std::span<char *>& args) -> std::optional<Config> {
+  static constexpr auto from_args(const std::span<char *> &args)
+      -> std::optional<Config> {
     if (args.size() != 2) {
       return {};
     }
@@ -24,7 +25,7 @@ export class Config {
 
     try {
       number = std::stoull(number_str);
-    } catch (const std::invalid_argument&) {
+    } catch (const std::invalid_argument &) {
       return {};
     }
 
