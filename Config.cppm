@@ -20,7 +20,7 @@ public:
       return {};
     }
 
-    auto number_str = args[1];
+    const auto number_str = args[1];
     std::size_t number{};
     try {
       number = std::stoull(number_str);
