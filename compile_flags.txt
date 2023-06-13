@@ -1,3 +1,4 @@
 -std=c++2b
 -Weverything
 -Wno-c++98-compat-pedantic
+-fprebuilt-module-path=.

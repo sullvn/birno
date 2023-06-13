@@ -3,7 +3,7 @@ all: a.out
 
 .PHONY: clean
 clean:
-	rm -f a.out iostream.pcm
+	rm -f a.out Config.pcm iostream.pcm
 
 
 CPP_BASE := clang++ \
@@ -11,11 +11,23 @@ CPP_BASE := clang++ \
 
 CPP := $(CPP_BASE) \
 	-Weverything \
-	-Wno-c++98-compat-pedantic
+	-Wno-c++98-compat-pedantic \
+	-fprebuilt-module-path=.
 
-a.out: main.cpp
+
+a.out: main.cpp Config.pcm
 	$(CPP) \
+		Config.pcm \
 		main.cpp
+
+
+CPP_MODULE := $(CPP) \
+	--precompile
+
+Config.pcm: Config.cppm
+	$(CPP_MODULE) \
+		Config.cppm \
+		-o Config.pcm
 
 
 CPP_SYSTEM_HEADER := $(CPP_BASE) \
