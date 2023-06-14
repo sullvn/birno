@@ -3,7 +3,7 @@ all: a.out
 
 .PHONY: clean
 clean:
-	rm -f a.out Config.pcm iostream.pcm
+	rm -f a.out Config.pcm iostream.pcm term_colors.pcm
 
 
 CPP_BASE := clang++ \
@@ -12,12 +12,14 @@ CPP_BASE := clang++ \
 CPP := $(CPP_BASE) \
 	-Weverything \
 	-Wno-c++98-compat-pedantic \
+	-fexperimental-library \
 	-fprebuilt-module-path=.
 
 
-a.out: main.cpp Config.pcm
+a.out: main.cpp Config.pcm term_colors.pcm
 	$(CPP) \
 		Config.pcm \
+		term_colors.pcm \
 		main.cpp
 
 
@@ -28,6 +30,11 @@ Config.pcm: Config.cppm
 	$(CPP_MODULE) \
 		Config.cppm \
 		-o Config.pcm
+
+term_colors.pcm: term_colors.cppm
+	$(CPP_MODULE) \
+		term_colors.cppm \
+		-o term_colors.pcm
 
 
 CPP_SYSTEM_HEADER := $(CPP_BASE) \
