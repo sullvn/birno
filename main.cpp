@@ -4,6 +4,7 @@
 #include <ranges>
 #include <span>
 
+import colors;
 import Config;
 import term_colors;
 
@@ -19,15 +20,14 @@ auto main(int argc, char *argv[]) -> int {
   const auto config = maybe_config.value();
 
   auto bytes = std::views::istream<char>(std::cin);
-  auto bytes_truncated = bytes | std::views::take(config.number);
-
-  for (const auto b : bytes_truncated) {
+  for (const auto b : bytes) {
     const auto color =
-        term_colors::set_background(255, 255, static_cast<uint8_t>(b));
+        colors::byte_color(config.color_scheme, static_cast<std::byte>(b));
+    const auto color_tty =
+        term_colors::set_background(color.r, color.g, color.b);
 
-    std::cout.write(color.data(), color.size());
+    std::cout.write(color_tty.data(), color_tty.size());
     std::cout << " ";
-    // std::cout << std::span{term_colors::set(100, 200, 0)} << b;
   }
 
   std::cout << term_colors::clear();

@@ -3,7 +3,7 @@ all: a.out
 
 .PHONY: clean
 clean:
-	rm -f a.out Config.pcm iostream.pcm term_colors.pcm
+	rm -f a.out colors.pcm Config.pcm iostream.pcm term_colors.pcm
 
 
 CPP_BASE := clang++ \
@@ -16,8 +16,9 @@ CPP := $(CPP_BASE) \
 	-fprebuilt-module-path=.
 
 
-a.out: main.cpp Config.pcm term_colors.pcm
+a.out: main.cpp colors.pcm Config.pcm term_colors.pcm
 	$(CPP) \
+		colors.pcm \
 		Config.pcm \
 		term_colors.pcm \
 		main.cpp
@@ -25,6 +26,11 @@ a.out: main.cpp Config.pcm term_colors.pcm
 
 CPP_MODULE := $(CPP) \
 	--precompile
+
+colors.pcm: colors.cppm
+	$(CPP_MODULE) \
+		colors.cppm \
+		-o colors.pcm
 
 Config.pcm: Config.cppm
 	$(CPP_MODULE) \
