@@ -36,7 +36,7 @@ constexpr auto array_of(T &&...t) -> std::array<V, sizeof...(T)> {
   return {{std::forward<T>(t)...}};
 }
 
-export constexpr auto viridis = array_of<RGB>(
+export inline constexpr auto viridis = array_of<RGB>(
     RGB{68, 1, 84}, RGB{68, 2, 86}, RGB{69, 4, 87}, RGB{69, 5, 89},
     RGB{70, 7, 90}, RGB{70, 8, 92}, RGB{70, 10, 93}, RGB{70, 11, 94},
     RGB{71, 13, 96}, RGB{71, 14, 97}, RGB{71, 16, 99}, RGB{71, 17, 100},
@@ -102,7 +102,7 @@ export constexpr auto viridis = array_of<RGB>(
     RGB{236, 229, 27}, RGB{239, 229, 28}, RGB{241, 229, 29}, RGB{244, 230, 30},
     RGB{246, 230, 32}, RGB{248, 230, 33}, RGB{251, 231, 35}, RGB{253, 231, 37});
 
-export constexpr auto magma = array_of<RGB>(
+export inline constexpr auto magma = array_of<RGB>(
     RGB{0, 0, 4}, RGB{1, 0, 5}, RGB{1, 1, 6}, RGB{1, 1, 8}, RGB{2, 1, 9},
     RGB{2, 2, 11}, RGB{2, 2, 13}, RGB{3, 3, 15}, RGB{3, 3, 18}, RGB{4, 4, 20},
     RGB{5, 4, 22}, RGB{6, 5, 24}, RGB{6, 5, 26}, RGB{7, 6, 28}, RGB{8, 7, 30},
@@ -173,7 +173,7 @@ export constexpr auto magma = array_of<RGB>(
     RGB{252, 247, 185}, RGB{252, 249, 187}, RGB{252, 251, 189},
     RGB{252, 253, 191});
 
-export constexpr auto inferno = array_of<RGB>(
+export inline constexpr auto inferno = array_of<RGB>(
     RGB{0, 0, 4}, RGB{1, 0, 5}, RGB{1, 1, 6}, RGB{1, 1, 8}, RGB{2, 1, 10},
     RGB{2, 2, 12}, RGB{2, 2, 14}, RGB{3, 2, 16}, RGB{4, 3, 18}, RGB{4, 3, 20},
     RGB{5, 4, 23}, RGB{6, 4, 25}, RGB{7, 5, 27}, RGB{8, 5, 29}, RGB{9, 6, 31},
@@ -240,7 +240,7 @@ export constexpr auto inferno = array_of<RGB>(
     RGB{246, 250, 150}, RGB{248, 251, 154}, RGB{249, 252, 157},
     RGB{250, 253, 161}, RGB{252, 255, 164});
 
-export constexpr auto plasma = array_of<RGB>(
+export inline constexpr auto plasma = array_of<RGB>(
     RGB{13, 8, 135}, RGB{16, 7, 136}, RGB{19, 7, 137}, RGB{22, 7, 138},
     RGB{25, 6, 140}, RGB{27, 6, 141}, RGB{29, 6, 142}, RGB{32, 6, 143},
     RGB{34, 6, 144}, RGB{36, 6, 145}, RGB{38, 5, 145}, RGB{40, 5, 146},
@@ -306,11 +306,13 @@ export constexpr auto plasma = array_of<RGB>(
     RGB{244, 237, 39}, RGB{243, 238, 39}, RGB{243, 240, 39}, RGB{242, 242, 39},
     RGB{241, 244, 38}, RGB{241, 245, 37}, RGB{240, 247, 36}, RGB{240, 249, 33});
 
-export const std::unordered_map<std::string_view, std::span<const RGB>>
-    color_schemes{
-        {std::string_view{"viridis"}, std::span{viridis}},
-        {std::string_view{"magma"}, std::span{magma}},
-        {std::string_view{"inferno"}, std::span{inferno}},
-        {std::string_view{"plasma"}, std::span{plasma}},
-    };
+export
+    [[clang::no_destroy]] inline const std::unordered_map<std::string_view,
+                                                          std::span<const RGB>>
+        color_schemes{
+            {std::string_view{"viridis"}, std::span{viridis}},
+            {std::string_view{"magma"}, std::span{magma}},
+            {std::string_view{"inferno"}, std::span{inferno}},
+            {std::string_view{"plasma"}, std::span{plasma}},
+        };
 } // namespace colors

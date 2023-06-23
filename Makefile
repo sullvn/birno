@@ -7,7 +7,7 @@ clean:
 
 
 CPP_BASE := clang++ \
-	-std=c++2b \
+	-std=c++2b
 
 CPP := $(CPP_BASE) \
 	-Weverything \
@@ -32,7 +32,7 @@ colors.pcm: colors.cppm
 		colors.cppm \
 		-o colors.pcm
 
-Config.pcm: Config.cppm
+Config.pcm: Config.cppm colors.pcm
 	$(CPP_MODULE) \
 		Config.cppm \
 		-o Config.pcm
