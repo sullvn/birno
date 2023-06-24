@@ -14,7 +14,7 @@ import term_colors;
 static auto print_usage() -> void {
   const auto color_scheme_names = colors::color_schemes | std::views::keys;
 
-  std::cerr << "USAGE: a.out <";
+  std::cerr << "USAGE: birno <";
 
   bool first = true;
   for (const auto &csn : color_scheme_names) {

@@ -1,9 +1,9 @@
 .PHONY: all
-all: a.out
+all: birno
 
 .PHONY: clean
 clean:
-	rm -f a.out colors.pcm Config.pcm iostream.pcm term_colors.pcm
+	rm -f birno colors.pcm Config.pcm iostream.pcm term_colors.pcm
 
 
 CPP_BASE := clang++ \
@@ -16,12 +16,13 @@ CPP := $(CPP_BASE) \
 	-fprebuilt-module-path=.
 
 
-a.out: main.cpp colors.pcm Config.pcm term_colors.pcm
+birno: main.cpp colors.pcm Config.pcm term_colors.pcm
 	$(CPP) \
 		colors.pcm \
 		Config.pcm \
 		term_colors.pcm \
-		main.cpp
+		main.cpp \
+		-o birno
 
 
 CPP_MODULE := $(CPP) \
