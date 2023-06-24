@@ -13,22 +13,39 @@ module;
 export module colors;
 
 namespace colors {
+
+/**
+ * RGB (24-bit)
+ */
 export struct RGB {
   const std::uint8_t r;
   const std::uint8_t g;
   const std::uint8_t b;
 };
 
-export constexpr auto byte_color(const std::span<const RGB> &colors,
+/**
+ * byte_color to visually display in the terminal
+ *
+ * Snaps the byte value to closest index within
+ * the color scheme palette.
+ *
+ * Interpolation is *not* done as many good color
+ * schemes are non-linear. The required interpolation
+ * functions can be quite complex. At the same time,
+ * the maximum size of a color scheme is quite small.
+ * Just 256 values from a byte's possible options. So
+ * an index lookup is much simpler and faster to boot.
+ */
+export constexpr auto byte_color(const std::span<const RGB> &color_scheme,
                                  std::byte byte) -> const RGB & {
   constexpr auto byte_permutations = std::numeric_limits<std::uint8_t>::max();
 
-  const auto stride = static_cast<double>(colors.size()) /
+  const auto stride = static_cast<double>(color_scheme.size()) /
                       static_cast<double>(byte_permutations);
   const auto index =
       static_cast<std::size_t>(std::floor(static_cast<double>(byte) * stride));
 
-  return colors[index];
+  return color_scheme[index];
 }
 
 template <typename V, typename... T>
@@ -36,6 +53,17 @@ constexpr auto array_of(T &&...t) -> std::array<V, sizeof...(T)> {
   return {{std::forward<T>(t)...}};
 }
 
+/**
+ * viridis color scheme
+ *
+ * - Purple, blue, green, yellow
+ * - Perceptually uniform
+ *
+ * [Using pre-computed steps from D3.][0]
+ *
+ * [0]:
+ * https://github.com/d3/d3-scale-chromatic/blob/2aa3ad24197136a5adeb1647502270dba5d74668/src/sequential-multi/viridis.js#L10
+ */
 export inline constexpr auto viridis = array_of<RGB>(
     RGB{68, 1, 84}, RGB{68, 2, 86}, RGB{69, 4, 87}, RGB{69, 5, 89},
     RGB{70, 7, 90}, RGB{70, 8, 92}, RGB{70, 10, 93}, RGB{70, 11, 94},
@@ -102,6 +130,17 @@ export inline constexpr auto viridis = array_of<RGB>(
     RGB{236, 229, 27}, RGB{239, 229, 28}, RGB{241, 229, 29}, RGB{244, 230, 30},
     RGB{246, 230, 32}, RGB{248, 230, 33}, RGB{251, 231, 35}, RGB{253, 231, 37});
 
+/**
+ * magma color scheme
+ *
+ * - Black, purple, red, yellow
+ * - Perceptually uniform
+ *
+ * [Using pre-computed steps from D3.][0]
+ *
+ * [0]:
+ * https://github.com/d3/d3-scale-chromatic/blob/2aa3ad24197136a5adeb1647502270dba5d74668/src/sequential-multi/viridis.js#L12
+ */
 export inline constexpr auto magma = array_of<RGB>(
     RGB{0, 0, 4}, RGB{1, 0, 5}, RGB{1, 1, 6}, RGB{1, 1, 8}, RGB{2, 1, 9},
     RGB{2, 2, 11}, RGB{2, 2, 13}, RGB{3, 3, 15}, RGB{3, 3, 18}, RGB{4, 4, 20},
@@ -173,6 +212,17 @@ export inline constexpr auto magma = array_of<RGB>(
     RGB{252, 247, 185}, RGB{252, 249, 187}, RGB{252, 251, 189},
     RGB{252, 253, 191});
 
+/**
+ * inferno color scheme
+ *
+ * - Black, reddish-purple, red, yellow
+ * - Perceptually uniform
+ *
+ * [Using pre-computed steps from D3.][0]
+ *
+ * [0]:
+ * https://github.com/d3/d3-scale-chromatic/blob/2aa3ad24197136a5adeb1647502270dba5d74668/src/sequential-multi/viridis.js#L14
+ */
 export inline constexpr auto inferno = array_of<RGB>(
     RGB{0, 0, 4}, RGB{1, 0, 5}, RGB{1, 1, 6}, RGB{1, 1, 8}, RGB{2, 1, 10},
     RGB{2, 2, 12}, RGB{2, 2, 14}, RGB{3, 2, 16}, RGB{4, 3, 18}, RGB{4, 3, 20},
@@ -240,6 +290,17 @@ export inline constexpr auto inferno = array_of<RGB>(
     RGB{246, 250, 150}, RGB{248, 251, 154}, RGB{249, 252, 157},
     RGB{250, 253, 161}, RGB{252, 255, 164});
 
+/**
+ * plasma color scheme
+ *
+ * - Blue, purple, yellow
+ * - Perceptually uniform
+ *
+ * [Using pre-computed steps from D3.][0]
+ *
+ * [0]:
+ * https://github.com/d3/d3-scale-chromatic/blob/2aa3ad24197136a5adeb1647502270dba5d74668/src/sequential-multi/viridis.js#L16
+ */
 export inline constexpr auto plasma = array_of<RGB>(
     RGB{13, 8, 135}, RGB{16, 7, 136}, RGB{19, 7, 137}, RGB{22, 7, 138},
     RGB{25, 6, 140}, RGB{27, 6, 141}, RGB{29, 6, 142}, RGB{32, 6, 143},
@@ -306,6 +367,13 @@ export inline constexpr auto plasma = array_of<RGB>(
     RGB{244, 237, 39}, RGB{243, 238, 39}, RGB{243, 240, 39}, RGB{242, 242, 39},
     RGB{241, 244, 38}, RGB{241, 245, 37}, RGB{240, 247, 36}, RGB{240, 249, 33});
 
+/**
+ * color_schemes map: name -> RGB steps
+ *
+ * NOTE: `std::unordered_map` doesn't support
+ * `contexpr`. So we allow it to construct itself
+ * at runtime and skip destruction on exit.
+ */
 export
     [[clang::no_destroy]] inline const std::unordered_map<std::string_view,
                                                           std::span<const RGB>>
