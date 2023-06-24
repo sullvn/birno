@@ -22,7 +22,11 @@ birno: main.cpp colors.pcm Config.pcm term_colors.pcm
 		Config.pcm \
 		term_colors.pcm \
 		main.cpp \
-		-o birno
+		-O3 \
+		-o birno \
+	&& llvm-strip \
+		--strip-all \
+		birno
 
 
 CPP_MODULE := $(CPP) \
