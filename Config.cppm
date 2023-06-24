@@ -10,12 +10,19 @@ import colors;
 
 export module Config;
 
+/**
+ * Config, instantiated from program
+ * arguments and/or config
+ */
 export class Config {
 public:
+  /**
+   * color_scheme configured
+   */
   const std::span<const colors::RGB> color_scheme;
 
   /**
-   * Construct from program arguments
+   * Construct config from program arguments
    */
   static constexpr auto from_args(const std::span<char *> &args)
       -> std::optional<Config> {
