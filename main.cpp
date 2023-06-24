@@ -8,12 +8,33 @@ import colors;
 import Config;
 import term_colors;
 
+/**
+ * print_usage information to stderr
+ */
+static auto print_usage() -> void {
+  const auto color_scheme_names = colors::color_schemes | std::views::keys;
+
+  std::cerr << "USAGE: a.out <";
+
+  bool first = true;
+  for (const auto &csn : color_scheme_names) {
+    if (!first) {
+      std::cerr << " | ";
+    }
+    std::cerr << csn;
+
+    first = false;
+  }
+
+  std::cerr << ">\n";
+}
+
 auto main(int argc, char *argv[]) -> int {
   const std::span args{argv, static_cast<std::size_t>(argc)};
 
   const auto maybe_config = Config::from_args(args);
   if (!maybe_config.has_value()) {
-    std::cerr << "USAGE: a.out <number>\n";
+    print_usage();
     return 1;
   }
 
