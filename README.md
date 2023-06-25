@@ -22,7 +22,7 @@ fun and absolutely no profit.
 <img
   alt="Example using birno against itself"
   src="docs/example.gif"
-  width="600"
+  width="672"
 >
 </div>
 <br />
